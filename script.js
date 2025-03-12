@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (tweetText) {
                 const tweetDiv = document.createElement("div");
                 tweetDiv.classList.add("tweet");
-                tweetDiv.innerHTML = tweetText + ' <span class="like">❤️</span>';
+                tweetDiv.innerHTML = tweetText + ' <span class="like">♥</span>';
                 
                 document.getElementById("tweets").prepend(tweetDiv);
                 document.getElementById("tweetInput").value = "";
