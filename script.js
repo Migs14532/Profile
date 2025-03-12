@@ -1,52 +1,43 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const createProfileBtn = document.getElementById("createProfile");
-    const postTweetBtn = document.getElementById("postTweet");
-
-    if (createProfileBtn) {
-        createProfileBtn.addEventListener("click", function () {
-            const name = document.getElementById("name").value;
-            const birthday = document.getElementById("birthday").value;
-            const bio = document.getElementById("bio").value;
-            const quote = document.getElementById("quote").value;
-            const profilePic = document.getElementById("profilePic").files[0];
-
-            if (name && birthday && bio && quote && profilePic) {
+    if (document.getElementById("createProfile")) {
+        document.getElementById("createProfile").addEventListener("click", function () {
+            localStorage.setItem("name", document.getElementById("name").value);
+            localStorage.setItem("birthday", document.getElementById("birthday").value);
+            localStorage.setItem("bio", document.getElementById("bio").value);
+            localStorage.setItem("quote", document.getElementById("quote").value);
+            
+            const file = document.getElementById("profilePic").files[0];
+            if (file) {
                 const reader = new FileReader();
-                reader.onload = function (event) {
-                    localStorage.setItem("profilePic", event.target.result);
-                    localStorage.setItem("name", name);
-                    localStorage.setItem("birthday", birthday);
-                    localStorage.setItem("bio", bio);
-                    localStorage.setItem("quote", quote);
-
+                reader.onload = function (e) {
+                    localStorage.setItem("profilePic", e.target.result);
                     window.location.href = "feed.html";
                 };
-                reader.readAsDataURL(profilePic);
+                reader.readAsDataURL(file);
             } else {
-                alert("Please fill all fields and upload a picture.");
+                window.location.href = "feed.html";
             }
         });
     }
 
-    if (postTweetBtn) {
-        document.getElementById("displayName").innerText = localStorage.getItem("name");
-        document.getElementById("displayBirthday").innerText = "Birthday: " + localStorage.getItem("birthday");
-        document.getElementById("displayBio").innerText = localStorage.getItem("bio");
-        document.getElementById("displayQuote").innerText = localStorage.getItem("quote");
-        document.getElementById("displayPic").src = localStorage.getItem("profilePic");
+    if (document.getElementById("nameDisplay")) {
+        document.getElementById("nameDisplay").innerText = localStorage.getItem("name");
+        document.getElementById("birthdayDisplay").innerText = "Birthday: " + localStorage.getItem("birthday");
+        document.getElementById("bioDisplay").innerText = localStorage.getItem("bio");
+        document.getElementById("quoteDisplay").innerText = "“" + localStorage.getItem("quote") + "”";
+        document.getElementById("profilePicDisplay").src = localStorage.getItem("profilePic");
 
-        postTweetBtn.addEventListener("click", function () {
+        document.getElementById("postTweet").addEventListener("click", function () {
             const tweetText = document.getElementById("tweetInput").value;
             if (tweetText) {
-                const tweetContainer = document.getElementById("tweetsList");
                 const tweetDiv = document.createElement("div");
                 tweetDiv.classList.add("tweet");
-                tweetDiv.innerHTML = `${tweetText} <span class="like-btn">❤️</span>`;
-
-                tweetContainer.prepend(tweetDiv);
+                tweetDiv.innerHTML = tweetText + ' <span class="like">❤️</span>';
+                
+                document.getElementById("tweets").prepend(tweetDiv);
                 document.getElementById("tweetInput").value = "";
 
-                tweetDiv.querySelector(".like-btn").addEventListener("click", function () {
+                tweetDiv.querySelector(".like").addEventListener("click", function () {
                     this.classList.toggle("liked");
                 });
             }
