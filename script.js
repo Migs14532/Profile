@@ -21,26 +21,40 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (document.getElementById("nameDisplay")) {
-        document.getElementById("nameDisplay").innerText = localStorage.getItem("name");
-        document.getElementById("birthdayDisplay").innerText = "Birthday: " + localStorage.getItem("birthday");
-        document.getElementById("bioDisplay").innerText = localStorage.getItem("bio");
-        document.getElementById("quoteDisplay").innerText = "“" + localStorage.getItem("quote") + "”";
-        document.getElementById("profilePicDisplay").src = localStorage.getItem("profilePic");
+        document.getElementById("nameDisplay").innerText = localStorage.getItem("name") || "No Name";
+        document.getElementById("birthdayDisplay").innerText = "Birthday: " + (localStorage.getItem("birthday") || "Not set");
+        document.getElementById("bioDisplay").innerText = localStorage.getItem("bio") || "No bio available";
+        document.getElementById("quoteDisplay").innerText = "“" + (localStorage.getItem("quote") || "No quote") + "”";
+        
+        const profilePic = localStorage.getItem("profilePic");
+        if (profilePic) {
+            document.getElementById("profilePicDisplay").src = profilePic;
+        }
 
         document.getElementById("postTweet").addEventListener("click", function () {
             const tweetText = document.getElementById("tweetInput").value;
             if (tweetText) {
                 const tweetDiv = document.createElement("div");
                 tweetDiv.classList.add("tweet");
-                tweetDiv.innerHTML = tweetText + ' <span class="like">♥</span>';
-                
-                document.getElementById("tweets").prepend(tweetDiv);
-                document.getElementById("tweetInput").value = "";
-
-                tweetDiv.querySelector(".like").addEventListener("click", function () {
+        
+                const textSpan = document.createElement("span");
+                textSpan.textContent = tweetText;
+        
+                const likeSpan = document.createElement("span");
+                likeSpan.classList.add("like");
+                likeSpan.innerHTML = "♥";
+        
+                likeSpan.addEventListener("click", function () {
                     this.classList.toggle("liked");
                 });
+        
+                tweetDiv.appendChild(textSpan);
+                tweetDiv.appendChild(likeSpan);
+        
+                document.getElementById("tweets").prepend(tweetDiv);
+                document.getElementById("tweetInput").value = "";
             }
         });
+        
     }
 });
