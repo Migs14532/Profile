@@ -53,8 +53,10 @@ document.addEventListener("DOMContentLoaded", function () {
         
                 document.getElementById("tweets").prepend(tweetDiv);
                 document.getElementById("tweetInput").value = "";
+        
+                document.getElementById("roarSound").play();
             }
-        });
+        });        
         
     }
 });
